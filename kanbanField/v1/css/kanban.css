@@ -1,0 +1,103 @@
+.page-title-box .page-title {
+    font-size: 18px;
+    line-height: 75px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.page-title {
+    margin-left: 100px;
+}
+
+.board {
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.tasks:not(:last-child) {
+    margin-right: 1.25rem;
+}
+
+.tasks {
+    display: inline-block;
+    width: 20rem;
+    padding: 0 1rem 1rem 1rem;
+    border: 1px solid #eef2f7;
+    vertical-align: top;
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+.tasks .task-header {
+    background-color: #f6f7fb;
+    padding: 1rem;
+    margin: 0 -1rem;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.task-list-items {
+    min-height: 100px;
+    position: relative;
+}
+
+.task-list-items-empty:before{
+    content: "No Tasks";
+    position: absolute;
+    line-height: 110px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    color: rgb(165, 165, 165);
+}
+
+.tasks .card {
+    white-space: normal;
+    margin-top: 1rem;
+    border: 1px solid #eee;
+    border-left-width: 0.25rem;
+    white-space: normal;
+    margin-top: 1rem;
+}
+
+.card {
+    -webkit-box-shadow: 0px 0px 35px 0px rgba(154, 161, 171, 0.15);
+    box-shadow: 0px 0px 35px 0px rgba(154, 161, 171, 0.15);
+    margin-bottom: 1.5rem;
+}
+
+.card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.5rem 1.5rem;
+    color: white !important;
+}
+
+.card-title {
+    margin-bottom: 10px !important;
+    font-weight: 500;
+    font-size: 16px !important;
+    cursor: pointer;
+}
+
+.title {
+    text-decoration: line-through;
+}
+
+.text-body {
+    opacity: 1;
+    color: rgba(108, 117, 125), 1 !important;
+}
+
+/*.card.selected {*/
+/*    background-color: #cce5ff;*/
+/*    border-color: #007bff;*/
+/*}*/
+
