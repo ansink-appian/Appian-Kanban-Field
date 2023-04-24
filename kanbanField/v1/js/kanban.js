@@ -26,43 +26,28 @@ let lighterColorCode = "#" +
     green.toString(16).padStart(2, "0") +
     blue.toString(16).padStart(2, "0");
 
-
-function bannerInformation(info) {
-
-    console.log("Dit is een test: "+info);
-    const bannerElement = document.createElement("div");
-    bannerElement.className = "kfBannerContainer";
-    bannerElement.innerHTML = `<div class="kfBanner">
-              <div class="kfSideLine" background-color="${accentColor}">
-            
-                </div>
-                <div class="kfInfoSvg">
-                  <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true" style="
-              fill: ${accentColor};
-            "><path fill="none" d="M16,8a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,13.875H17.125v-8H13v2.25h1.875v5.75H12v2.25h8Z"></path><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z"></path><title>Information filled</title></svg>
-                </div>
-                <div class="infoCont">
-                   <div class="informationAp">
-                 Information Notification
-                </div>
-                <div>
-                   No ${info} configured or available. 
-                </div>
-                </div
-              </div>`
+function emptyCheck(obj) {
+    if (typeof obj === 'object' && obj != null && Object.keys(obj).length !== 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
+
 Appian.Component.onNewValue(function (allParameters) { // Whenever a new value is provided to ANY input, this function is invoked with ALL inputs as a dictionary. This includes when the component is initialized.
     inputTasks = allParameters['tasks'];
     inputColumns = allParameters['columns'];
     selectedCard = allParameters["selectedTask"];
-
-
-
-
-    console.log(inputTasks  + " tasks: "+inputColumns);
+    // Reset validations
+    Appian.Component.setValidations("");
+    // Validations
+    if (emptyCheck(inputColumns)&&emptyCheck(inputTasks)) {
+        Appian.Component.setValidations("Missing columns and task information");
+        return;
+    }
 // Add Columns
-    if (!inputColumns) {
-        bannerInformation("Column");
+    if (emptyCheck(inputColumns)) {
+        Appian.Component.setValidations("Missing columns information");
     } else {
         board.innerHTML = '';
         inputColumns.forEach((column) => {
@@ -79,23 +64,19 @@ Appian.Component.onNewValue(function (allParameters) { // Whenever a new value i
     let draggingCard = null;
     const taskLists = document.querySelectorAll(".task-list-items");
 
-    if (!inputTasks) {
-        bannerInformation("Tasks");
+    if (emptyCheck(inputTasks)) {
+        Appian.Component.setValidations("Missing tasks information");
 
-    } else {
-
-
+    }
+    else
+    {
         inputTasks.forEach((card) => {
             let divCard = document.getElementById(card.status);
-
             // If Column is not found do nothing,
-
             if (divCard === null) {
                 return
             }
             ;
-
-
             const cardElement = document.createElement("div");
             cardElement.className = "card mb-0";
             cardElement.draggable = true;
@@ -106,7 +87,6 @@ Appian.Component.onNewValue(function (allParameters) { // Whenever a new value i
             }
             addCardClickListener(cardElement);
             cardElement.addEventListener("dragend", () => {
-
             });
 
             cardElement.innerHTML = `
@@ -157,61 +137,60 @@ Appian.Component.onNewValue(function (allParameters) { // Whenever a new value i
         })
 
 
-    function updateTaskStatus(id, newStatus) {
-        let task = inputTasks.find(t => t.id === parseInt(id));
-        if (task) {
-            task.status = newStatus;
-        }
-    };
+        function updateTaskStatus(id, newStatus) {
+            let task = inputTasks.find(t => t.id === parseInt(id));
+            if (task) {
+                task.status = newStatus;
+            }
+        };
 
-    // DRAG OVER
-    taskLists.forEach((taskList) => {
-        taskList.addEventListener("dragover", function (event) {
-            event.preventDefault();
+        // DRAG OVER
+        taskLists.forEach((taskList) => {
+            taskList.addEventListener("dragover", function (event) {
+                event.preventDefault();
+            });
         });
-    });
 
-    // DROP TASK
-    taskLists.forEach((taskList) => {
-        taskList.addEventListener("drop", function (event) {
-            event.preventDefault();
-            const cardId = event.dataTransfer.getData("text/plain");
-            const column = event.target.closest(".task-list-items");
-            updateTaskStatus(cardId, column.id);
-            Appian.Component.saveValue("tasks", inputTasks)
+        // DROP TASK
+        taskLists.forEach((taskList) => {
+            taskList.addEventListener("drop", function (event) {
+                event.preventDefault();
+                const cardId = event.dataTransfer.getData("text/plain");
+                const column = event.target.closest(".task-list-items");
+                updateTaskStatus(cardId, column.id);
+                Appian.Component.saveValue("tasks", inputTasks)
+                if (draggingCard !== null) {
+                    column.appendChild(draggingCard);
+                    draggingCard = null;
+                }
+            });
+        });
+
+
+        document.addEventListener("dragend", function (event) {
             if (draggingCard !== null) {
-                column.appendChild(draggingCard);
+                draggingCard.classList.remove("dragging");
                 draggingCard = null;
             }
         });
-    });
+
+        function updateTaskCount() {
+            taskLists.forEach(taskList => {
+
+                const childCount = document.getElementById(taskList.id).childElementCount;
+                document.getElementById(taskList.id + "-header").innerText = (taskList.id).toUpperCase() + " (" + childCount + ")";
+            })
 
 
-    document.addEventListener("dragend", function (event) {
-        if (draggingCard !== null) {
-            draggingCard.classList.remove("dragging");
-            draggingCard = null;
         }
-    });
 
-    function updateTaskCount() {
-        taskLists.forEach(taskList => {
-
-            const childCount = document.getElementById(taskList.id).childElementCount;
-            document.getElementById(taskList.id + "-header").innerText = (taskList.id).toUpperCase() + " (" + childCount + ")";
-        })
-
-
-    }
-
-    taskLists.forEach((taskList) => {
-        taskList.addEventListener("drop", function (event) {
-            updateTaskCount();
+        taskLists.forEach((taskList) => {
+            taskList.addEventListener("drop", function (event) {
+                updateTaskCount();
+            });
         });
-    });
+        updateTaskCount();
     }
-    ;
-    updateTaskCount();
 
     function addCardClickListener(cardElement) {
         cardElement.addEventListener('click', (event) => {
