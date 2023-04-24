@@ -96,8 +96,51 @@ a {
     color: rgba(108, 117, 125), 1 !important;
 }
 
-/*.card.selected {*/
-/*    background-color: #cce5ff;*/
-/*    border-color: #007bff;*/
-/*}*/
+.kfBannerContainer{
+    height:300px;
+    width :100%;
+    display:flex;
+    align-items:center;
+    justify-content : center;
+}
+.kfBanner{
+    box-sizing: border-box;
+    height: 64px;
+    width: 560px;
+    border: 1px solid rgba(5,74,218,0.3);
+    background:#EDF5FF;
+    display:flex;
+    /*   justify-content : center; */
+    align-items:center;
+}
+.informationAp{
+    color: #161616;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.16px;
+    line-height: 18px;
+}
+.loadingTableText{
+    color: #161616;
+    font-size: 14px;
+    letter-spacing: 0.16px;
+    line-height: 18px;
+}
+.kfSideLine{
+    height: 100%;
+    width: 3px;
+    /*background-color: #0043CE;*/
+    display:inline-block;
+}
+.kfInfoSvg {
+    width:52px;
+    display:flex;
+    justify-content:center;
+}
+.infoCont{
+    display:flex;
+    flex-flow:column;
+}
+
+
 
